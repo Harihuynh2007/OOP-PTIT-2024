@@ -1,0 +1,100 @@
+// Bài 1: Student Management
+
+class SinhVien {
+    private String hoTen;
+    private String MSSV;
+    private double diemNNLTC;
+    private double diemLTHDT;
+    private double diemANM;
+
+    // Constructor
+    public SinhVien(String hoTen, String MSSV, double diemNNLTC, double diemLTHDT, double diemANM) {
+        this.hoTen = hoTen;
+        this.MSSV = MSSV;
+        this.diemNNLTC = diemNNLTC;
+        this.diemLTHDT = diemLTHDT;
+        this.diemANM = diemANM;
+    }
+
+    // Method to calculate average grade
+    public double tinhDiemTB() {
+        return (diemNNLTC + diemLTHDT + diemANM) / 3;
+    }
+
+    // Method to display student information
+    @Override
+    public String toString() {
+        return String.format("%-20s %-10s %-10.2f %-10.2f %-10.2f %-10.2f", 
+                              hoTen, MSSV, diemNNLTC, diemLTHDT, diemANM, tinhDiemTB());
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        SinhVien[] danhSachSV = new SinhVien[3];
+
+        // Sample input for 3 students
+        danhSachSV[0] = new SinhVien("Nguyen Van A", "123", 7.5, 7.0, 8.0);
+        danhSachSV[1] = new SinhVien("Ho Thi B", "456", 5.0, 6.0, 4.5);
+        danhSachSV[2] = new SinhVien("Dang Kim C", "789", 3.0, 4.0, 5.0);
+
+        // Display student details
+        System.out.printf("%-20s %-10s %-10s %-10s %-10s %-10s\n", "Ho Ten", "MSSV", "NNLTC++", "LTHDT", "ANM", "Diem TB");
+        for (SinhVien sv : danhSachSV) {
+            System.out.println(sv);
+        }
+    }
+}
+
+// Bài 2: Product Management
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+class ThucPham {
+    private String maHang;
+    private String tenHang;
+    private double donGia;
+    private LocalDate ngaySanXuat;
+    private LocalDate hanSuDung;
+
+    // Constructor
+    public ThucPham(String maHang, String tenHang, double donGia, LocalDate ngaySanXuat, LocalDate hanSuDung) {
+        if (maHang.isEmpty() || tenHang.isEmpty() || donGia <= 0 || !hanSuDung.isAfter(ngaySanXuat)) {
+            throw new IllegalArgumentException("Invalid data provided.");
+        }
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.donGia = donGia;
+        this.ngaySanXuat = ngaySanXuat;
+        this.hanSuDung = hanSuDung;
+    }
+
+    // Method to check if the product is still valid
+    public boolean isValid() {
+        LocalDate today = LocalDate.now();
+        return today.isBefore(hanSuDung);
+    }
+
+    // Method to display product information
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("Ma Hang: %s, Ten Hang: %s, Don Gia: %.2f, NSX: %s, HSD: %s, Valid: %b", 
+                             maHang, tenHang, donGia, ngaySanXuat.format(formatter), hanSuDung.format(formatter), isValid());
+    }
+}
+
+class MainProduct {
+    public static void main(String[] args) {
+        // Sample input for products
+        ThucPham tp1 = new ThucPham("001", "Milk", 20000, LocalDate.of(2023, 5, 1), LocalDate.of(2023, 12, 1));
+        ThucPham tp2 = new ThucPham("002", "Bread", 15000, LocalDate.of(2023, 9, 1), LocalDate.of(2023, 10, 10));
+        ThucPham tp3 = new ThucPham("003", "Egg", 30000, LocalDate.of(2023, 6, 1), LocalDate.of(2023, 11, 1));
+
+        // Display product details
+        System.out.println(tp1);
+        System.out.println(tp2);
+        System.out.println(tp3);
+    }
+}
