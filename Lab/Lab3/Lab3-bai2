@@ -1,0 +1,244 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Document {
+    protected String id;
+    protected String nxb;
+    protected int number;
+
+    public Document(String id, String nxb, int number) {
+        this.id = id;
+        this.nxb = nxb;
+        this.number = number;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id='" + id + '\'' +
+                ", nxb='" + nxb + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+
+class Book extends Document {
+    private String author;
+    private int numberPage;
+
+    public Book(String id, String nxb, int number, String author, int numberPage) {
+        super(id, nxb, number);
+        this.author = author;
+        this.numberPage = numberPage;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "author='" + author + '\'' +
+                ", numberPage=" + numberPage +
+                ", id='" + id + '\'' +
+                ", nxb='" + nxb + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+
+class Newspaper extends Document {
+    private int dayIssue;
+
+    public Newspaper(String id, String nxb, int number, int dayIssue) {
+        super(id, nxb, number);
+        this.dayIssue = dayIssue;
+    }
+
+    @Override
+    public String toString() {
+        return "Newspaper{" +
+                "dayIssue=" + dayIssue +
+                ", id='" + id + '\'' +
+                ", nxb='" + nxb + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+
+class Journal extends Document {
+    private int issueNumber;
+    private int monthIssue;
+
+    public Journal(String id, String nxb, int number, int issueNumber, int monthIssue) {
+        super(id, nxb, number);
+        this.issueNumber = issueNumber;
+        this.monthIssue = monthIssue;
+    }
+
+    @Override
+    public String toString() {
+        return "Journal{" +
+                "issueNumber=" + issueNumber +
+                ", monthIssue=" + monthIssue +
+                ", id='" + id + '\'' +
+                ", nxb='" + nxb + '\'' +
+                ", number=" + number +
+                '}';
+    }
+}
+
+class ManagerDocument {
+    private List<Document> documents;
+
+    public ManagerDocument() {
+        this.documents = new ArrayList<>();
+    }
+
+    public void addDocument(Document document) {
+        this.documents.add(document);
+    }
+
+    public boolean deleteDocument(String id) {
+        Document doc = this.documents.stream()
+                .filter(document -> document.getId().equals(id))
+                .findFirst().orElse(null);
+        if (doc == null) {
+            return false;
+        }
+        this.documents.remove(doc);
+        return true;
+    }
+
+    public void showInfor() {
+        this.documents.forEach(document -> System.out.println(document.toString()));
+    }
+
+    public void searchByBook() {
+        this.documents.stream().filter(doc -> doc instanceof Book).forEach(doc -> System.out.println(doc.toString()));
+    }
+
+    public void searchByNewspaper() {
+        this.documents.stream().filter(doc -> doc instanceof Newspaper).forEach(doc -> System.out.println(doc.toString()));
+    }
+
+    public void searchByJournal() {
+        this.documents.stream().filter(doc -> doc instanceof Journal).forEach(doc -> System.out.println(doc.toString()));
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ManagerDocument managerDocument = new ManagerDocument();
+
+        while (true) {
+            System.out.println("Application Manager Document");
+            System.out.println("Enter 1: To insert document");
+            System.out.println("Enter 2: To search document by category: ");
+            System.out.println("Enter 3: To show information documents");
+            System.out.println("Enter 4: To remove document by id");
+            System.out.println("Enter 5: To exit:");
+            String line = scanner.nextLine();
+
+            switch (line) {
+                case "1": {
+                    System.out.println("Enter a: to insert Book");
+                    System.out.println("Enter b: to insert Newspaper");
+                    System.out.println("Enter c: to insert Journal");
+                    String type = scanner.nextLine();
+
+                    switch (type) {
+                        case "a": {
+                            System.out.print("Enter ID: ");
+                            String id = scanner.nextLine();
+                            System.out.print("Enter nxb: ");
+                            String nxb = scanner.nextLine();
+                            System.out.print("Enter number: ");
+                            int number = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.print("Enter author: ");
+                            String author = scanner.nextLine();
+                            System.out.print("Enter page number: ");
+                            int numberPage = scanner.nextInt();
+                            Document book = new Book(id, nxb, number, author, numberPage);
+                            managerDocument.addDocument(book);
+                            System.out.println(book.toString());
+                            break;
+                        }
+                        case "b": {
+                            System.out.print("Enter ID: ");
+                            String id = scanner.nextLine();
+                            System.out.print("Enter nxb: ");
+                            String nxb = scanner.nextLine();
+                            System.out.print("Enter number: ");
+                            int number = scanner.nextInt();
+                            System.out.print("Enter day issue: ");
+                            int dayIssue = scanner.nextInt();
+                            Document newspaper = new Newspaper(id, nxb, number, dayIssue);
+                            managerDocument.addDocument(newspaper);
+                            System.out.println(newspaper.toString());
+                            break;
+                        }
+                        case "c": {
+                            System.out.print("Enter ID: ");
+                            String id = scanner.nextLine();
+                            System.out.print("Enter nxb: ");
+                            String nxb = scanner.nextLine();
+                            System.out.print("Enter number: ");
+                            int number = scanner.nextInt();
+                            System.out.print("Enter issue number: ");
+                            int issueNumber = scanner.nextInt();
+                            System.out.print("Enter month issue: ");
+                            int monthIssue = scanner.nextInt();
+                            Document journal = new Journal(id, nxb, number, issueNumber, monthIssue);
+                            managerDocument.addDocument(journal);
+                            System.out.println(journal.toString());
+                            break;
+                        }
+                        default:
+                            System.out.println("Invalid input");
+                    }
+                    break;
+                }
+                case "2": {
+                    System.out.println("Enter a to search book");
+                    System.out.println("Enter b to search newspaper");
+                    System.out.println("Enter c to search journal");
+                    String choice = scanner.nextLine();
+                    switch (choice) {
+                        case "a":
+                            managerDocument.searchByBook();
+                            break;
+                        case "b":
+                            managerDocument.searchByNewspaper();
+                            break;
+                        case "c":
+                            managerDocument.searchByJournal();
+                            break;
+                        default:
+                            System.out.println("Invalid input");
+                    }
+                    break;
+                }
+                case "3": {
+                    managerDocument.showInfor();
+                    break;
+                }
+                case "4": {
+                    System.out.print("Enter id to remove: ");
+                    String id = scanner.nextLine();
+                    System.out.println(managerDocument.deleteDocument(id) ? "Success" : "Fail");
+                    break;
+                }
+                case "5": {
+                    return;
+                }
+                default:
+                    System.out.println("Invalid input");
+            }
+        }
+    }
+}
